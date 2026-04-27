@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mission Astra: Lunar Descent</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============== LOADER ============== -->
+<div id="loader" class="loader">
+  <div class="stars"></div>
+  <div class="loader-content">
+    <h1 class="loader-title">Initializing Mission Astra<span class="dots"><span>.</span><span>.</span><span>.</span></span></h1>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-percent" id="progressPercent">0%</div>
+    </div>
+    <p class="loader-status" id="loaderStatus">Calibrating navigation...</p>
+  </div>
+</div>
+
+<!-- ============== STARFIELD BG ============== -->
+<canvas id="bgStars" class="bg-stars"></canvas>
+
+<!-- ============== HUD MUTE ============== -->
+<button id="muteBtn" class="mute-btn" title="Toggle Sound">
+  <span id="muteIcon">SOUND ON</span>
+</button>
+
+<!-- ============== MISSION CLOCK ============== -->
+<div id="missionClock" class="mission-clock hidden">
+  <span class="clock-label">MET</span>
+  <span id="clockValue">00:00.0</span>
+</div>
+
+<!-- ============== HERO ============== -->
+<section id="hero" class="section hero">
+  <div class="hero-inner">
+    <p class="eyebrow">MISSION CONTROL // ASTRA PROGRAM</p>
+    <h1 class="hero-title">Mission Astra: <span class="glow">Lunar Descent</span></h1>
+    <p class="tagline">Relive India's Historic Moon Landing.</p>
+    <p class="hero-sub">Take command of the Astra Lander through a five-stage simulation inspired by real lunar mission science.</p>
+    <button class="cta-btn" data-scroll="briefing">Begin Mission</button>
+    <div class="floating-craft" aria-hidden="true">
+      <svg viewBox="0 0 120 120" width="120" height="120">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#9fd1ff"/>
+            <stop offset="1" stop-color="#3a7bd5"/>
+          </linearGradient>
+        </defs>
+        <polygon points="60,10 80,70 60,60 40,70" fill="url(#g1)" stroke="#cfe7ff" stroke-width="1.5"/>
+        <rect x="52" y="60" width="16" height="20" fill="#1a2b4a" stroke="#9fd1ff" stroke-width="1.2"/>
+        <line x1="40" y1="70" x2="30" y2="95" stroke="#9fd1ff" stroke-width="2"/>
+        <line x1="80" y1="70" x2="90" y2="95" stroke="#9fd1ff" stroke-width="2"/>
+        <circle cx="60" cy="100" r="3" fill="#ff7043">
+          <animate attributeName="r" values="3;5;3" dur="0.6s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+  </div>
+  <div class="scroll-hint">scroll ↓</div>
+</section>
+
+<!-- ============== BRIEFING ============== -->
+<section id="briefing" class="section briefing">
+  <div class="container">
+    <p class="eyebrow">PHASE 01 // BRIEFING</p>
+    <h2 class="section-title">Mission Briefing</h2>
+    <p class="section-sub">Familiarize yourself with the controls and stage objectives before launch.</p>
+
+    <div class="grid-2">
+      <div class="panel">
+        <h3>Controls</h3>
+        <ul class="controls-list">
+          <li><span class="key">↑</span> Thrust</li>
+          <li><span class="key">←</span> Rotate Left</li>
+          <li><span class="key">→</span> Rotate Right</li>
+          <li><span class="key">SPACE</span> Action / Tap</li>
+        </ul>
+        <p class="hint">Tip: On touch devices, on-screen controls will appear during gameplay.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Stage Tips</h3>
+        <ul class="tips-list">
+          <li><b>Launch:</b> Maintain stability against tilt.</li>
+          <li><b>Orbit Raising:</b> Use precise timing.</li>
+          <li><b>Trans-Lunar Injection:</b> Set correct trajectory.</li>
+          <li><b>Lunar Orbit Insertion:</b> Reduce speed at the right moment.</li>
+          <li><b>Final Descent:</b> Control your descent carefully.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="objective-banner">
+      <strong>Objective:</strong> Complete all mission phases to successfully land the Astra Lander.
+    </div>
+
+    <h3 class="walkthrough-title">Stage-by-Stage Walkthrough</h3>
+    <p class="walkthrough-sub">Exactly what to do in each phase. Tap a card to expand.</p>
+
+    <div class="walkthrough">
+
+      <details class="wt-card" open>
+        <summary>
+          <span class="wt-num">01</span>
+          <span class="wt-title">Launch Phase</span>
+          <span class="wt-goal">Goal: keep the rocket vertical until it clears the atmosphere</span>
+        </summary>
+        <ol class="wt-steps">
+          <li>Hold <span class="key">↑</span> to fire the main engine — the rocket starts climbing immediately.</li>
+          <li>Watch the <b>tilt indicator</b> at the top of the canvas. Wind will push the rocket left or right.</li>
+          <li>Tap <span class="key">←</span> or <span class="key">→</span> in <b>short bursts</b> to counter the tilt. Don't over-correct.</li>
+          <li>Keep tilt within the safe range. If it exceeds the limit (about ±25°), the rocket breaks up.</li>
+          <li>Reach the target altitude bar at the top of the screen — stage clears automatically.</li>
+        </ol>
+        <p class="wt-tip"><b>Pro tip:</b> Pulse the rotation keys instead of holding them. Two quick taps usually beats one long press.</p>
+      </details>
+
+      <details class="wt-card">
+        <summary>
+          <span class="wt-num">02</span>
+          <span class="wt-title">Orbit Raising</span>
+          <span class="wt-goal">Goal: complete 4 timed burns to widen your orbit</span>
+        </summary>
+        <ol class="wt-steps">
+          <li>You'll see a <b>moving marker</b> sweeping across a horizontal bar.</li>
+          <li>A <b>green window</b> sits in the middle — that's the optimal burn zone.</li>
+          <li>Press <span class="key">SPACE</span> (or tap the screen) the moment the marker is inside the green zone.</li>
+          <li>A successful tap raises your orbit (counter goes up). A miss costs you and resets the marker.</li>
+          <li>Land <b>4 successful burns</b> and the stage completes.</li>
+        </ol>
+        <p class="wt-tip"><b>Pro tip:</b> Don't chase the marker — anticipate it. Tap slightly before it enters the zone, since reaction time is real.</p>
+      </details>
+
+      <details class="wt-card">
+        <summary>
+          <span class="wt-num">03</span>
+          <span class="wt-title">Trans-Lunar Injection</span>
+          <span class="wt-goal">Goal: aim a trajectory line into the Moon, then commit</span>
+        </summary>
+        <ol class="wt-steps">
+          <li>A dotted <b>trajectory line</b> extends from your spacecraft, with the Moon shown in the distance.</li>
+          <li>Use <span class="key">←</span> / <span class="key">→</span> to <b>rotate the angle</b> until the line passes through the Moon target.</li>
+          <li>Hold <span class="key">↑</span> to <b>charge thrust power</b> — you'll see the power bar fill up. Aim for the green band.</li>
+          <li>Once your aim looks good and power is in the green, press <span class="key">SPACE</span> to commit the burn.</li>
+          <li>Too low: you fall back to Earth. Too high: you overshoot. Just right: you arrive at the Moon.</li>
+        </ol>
+        <p class="wt-tip"><b>Pro tip:</b> Set your aim first, then build power. Trying to do both at once usually misses both.</p>
+      </details>
+
+      <details class="wt-card">
+        <summary>
+          <span class="wt-num">04</span>
+          <span class="wt-title">Lunar Orbit Insertion</span>
+          <span class="wt-goal">Goal: brake at the right moment to be captured by lunar gravity</span>
+        </summary>
+        <ol class="wt-steps">
+          <li>Your spacecraft approaches the Moon at high speed — too fast to be captured naturally.</li>
+          <li>A <b>green capture window</b> appears as you near the Moon. This is your braking opportunity.</li>
+          <li>Hold <span class="key">↑</span> to fire your <b>retro-thrusters</b> the moment you enter the green window.</li>
+          <li>Keep braking until your speed drops into the safe capture range (shown on the speed gauge).</li>
+          <li>Brake too early — wasted fuel. Too late — you fly past the Moon. Inside the window is success.</li>
+        </ol>
+        <p class="wt-tip"><b>Pro tip:</b> Listen for the audio cue when the window opens — your eyes will be busy watching the speed gauge.</p>
+      </details>
+
+      <details class="wt-card">
+        <summary>
+          <span class="wt-num">05</span>
+          <span class="wt-title">Final Descent</span>
+          <span class="wt-goal">Goal: land softly on the pad — vertical speed under 2.0 m/s</span>
+        </summary>
+        <ol class="wt-steps">
+          <li>You start with <b>limited fuel</b>. Watch the fuel gauge — running out mid-descent means crashing.</li>
+          <li>Use <span class="key">←</span> / <span class="key">→</span> to rotate. Use <span class="key">↑</span> to thrust against gravity.</li>
+          <li>Steer toward the <b>highlighted landing pad</b> on the surface — landing anywhere else is a fail.</li>
+          <li>Stay nearly <b>vertical</b> as you approach. A tilted touchdown tips the lander over.</li>
+          <li>Slow down so your <b>vertical speed is under 2.0 m/s</b> at touchdown. The HUD shows your current Vy.</li>
+          <li>Touch down gently, upright, on the pad — mission complete.</li>
+        </ol>
+        <p class="wt-tip"><b>Pro tip:</b> Fall fast at first to save fuel, then "suicide burn" — full throttle late — to slow just before landing. Practice this on Easy first.</p>
+      </details>
+
+    </div>
+
+    <div class="difficulty-wrap">
+      <p class="difficulty-label">Select Difficulty</p>
+      <div class="difficulty-options" id="difficultyOptions">
+        <button class="diff-btn" data-diff="easy">
+          <span class="diff-name">Easy</span>
+          <span class="diff-desc">More fuel · Light wind · Forgiving tolerances</span>
+        </button>
+        <button class="diff-btn active" data-diff="normal">
+          <span class="diff-name">Normal</span>
+          <span class="diff-desc">Standard mission parameters</span>
+        </button>
+        <button class="diff-btn" data-diff="hard">
+          <span class="diff-name">Hard</span>
+          <span class="diff-desc">Low fuel · Strong wind · Tight windows</span>
+        </button>
+      </div>
+    </div>
+
+    <button class="cta-btn" data-scroll="simulation">Start Simulation</button>
+  </div>
+</section>
+
+<!-- ============== SIMULATION ============== -->
+<section id="simulation" class="section simulation">
+  <div class="container">
+    <p class="eyebrow">PHASE 02 // SIMULATION</p>
+    <h2 class="section-title">Stage Simulation</h2>
+    <p class="section-sub">Each stage unlocks the next. Read the briefing, then execute.</p>
+
+    <!-- Stage selector -->
+    <div class="stage-selector" id="stageSelector"></div>
+
+    <!-- Active stage panel -->
+    <div class="stage-panel">
+      <div class="stage-header">
+        <div>
+          <p class="stage-tag">
+            <span id="stageTag">STAGE 1 OF 5</span>
+            <span class="diff-badge" id="diffBadge">NORMAL</span>
+          </p>
+          <h3 class="stage-title" id="stageTitle">Launch Phase</h3>
+          <p class="stage-desc" id="stageDesc">Maintain rocket balance using thrust.</p>
+        </div>
+        <div class="stage-stats" id="stageStats"></div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="game" width="900" height="500"></canvas>
+        <div class="overlay" id="gameOverlay">
+          <div class="overlay-content">
+            <h3 id="overlayTitle">Ready</h3>
+            <p id="overlayText">Press SPACE or tap START to begin the stage.</p>
+            <button class="cta-btn" id="overlayBtn">Start Stage</button>
+          </div>
+        </div>
+        <div id="alertBanner" class="alert-banner hidden"></div>
+      </div>
+
+      <!-- Touch controls -->
+      <div class="touch-controls" id="touchControls">
+        <button class="touch-btn" data-key="ArrowLeft">◀</button>
+        <button class="touch-btn thrust" data-key="ArrowUp">▲ THRUST</button>
+        <button class="touch-btn" data-key="ArrowRight">▶</button>
+        <button class="touch-btn action" data-key="Space">TAP</button>
+      </div>
+    </div>
+
+    <!-- Story unlock cards -->
+    <div class="story-grid" id="storyGrid"></div>
+  </div>
+</section>
+
+<!-- ============== FINAL ============== -->
+<section id="final" class="section final hidden">
+  <div class="container final-inner">
+    <p class="eyebrow success">TRANSMISSION RECEIVED</p>
+    <h2 class="final-title">Mission Successful</h2>
+    <p class="final-sub">The Astra Lander has touched down softly on the lunar surface.</p>
+
+    <div class="rank-card" id="rankCard">
+      <p class="rank-eyebrow">Final Rank</p>
+      <h3 class="rank-title" id="rankTitle">Astra Elite</h3>
+      <p class="rank-desc" id="rankDesc">Flawless execution across every phase.</p>
+
+      <div class="score-grid">
+        <div class="score-item">
+          <span class="score-label">Total Time</span>
+          <span class="score-value" id="finalTime">00:00.0</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Difficulty</span>
+          <span class="score-value" id="finalDiff">Normal</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Mission Score</span>
+          <span class="score-value" id="finalScore">0</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Stages Cleared</span>
+          <span class="score-value" id="finalStages">5 / 5</span>
+        </div>
+      </div>
+
+      <div class="stage-times" id="stageTimes"></div>
+    </div>
+
+    <div class="achievement-card">
+      <h3>Achievement Unlocked</h3>
+      <p><b>Soft Lunar Landing</b> — You guided the Astra Lander through launch, orbit raising, trans-lunar injection, lunar capture, and a controlled powered descent. Inspired by humanity's continued effort to reach our nearest celestial neighbour, this simulation echoes the precision required to make a craft kiss the Moon's surface without harm.</p>
+    </div>
+    <button class="cta-btn" id="replayBtn">Replay Mission</button>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>Mission Astra — An interactive simulation. Educational use only.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
